@@ -283,6 +283,18 @@ class HandleNewLeadJob implements ShouldQueue
 }
 ```
 
+### Timestamp format
+
+> **Note:** Timestamps in webhook payloads use the format `yyyy-MM-dd HH:mm:ss` (e.g. `2025-01-01 00:00:39`), **not** ISO 8601 with timezone. Keep this in mind when parsing date fields:
+>
+> ```php
+> // Correct
+> $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $webhookCall->payload('created_at'));
+>
+> // Incorrect — will fail or produce wrong results
+> $date = \Carbon\Carbon::parse($webhookCall->payload('created_at'));
+> ```
+
 ### Webhook payload examples
 
 #### new_lead / update_lead
@@ -323,7 +335,7 @@ class HandleNewLeadJob implements ShouldQueue
     "comments": [
         {
             "content": "First contact by phone",
-            "created_at": "2025-01-15T10:30:00+01:00"
+            "created_at": "2025-01-15 10:30:00"
         }
     ],
     "origin": "Website",
@@ -331,7 +343,7 @@ class HandleNewLeadJob implements ShouldQueue
     "status": "new",
     "purpose": "Achat",
     "contact_type": "email",
-    "created_at": "2025-01-15T10:30:00+01:00"
+    "created_at": "2025-01-15 10:30:00"
 }
 ```
 
@@ -343,7 +355,7 @@ class HandleNewLeadJob implements ShouldQueue
     "lead_id": 123,
     "external_lead_id": "EXT-456",
     "comment": "Client called back, very interested",
-    "created_at": "2025-01-15T14:00:00+01:00"
+    "created_at": "2025-01-15 14:00:00"
 }
 ```
 
@@ -354,8 +366,8 @@ class HandleNewLeadJob implements ShouldQueue
     "event": "new_reminder",
     "lead_id": 123,
     "external_lead_id": "EXT-456",
-    "created_at": "2025-01-15T14:00:00+01:00",
-    "start_time": "2025-01-20T09:00:00+01:00",
+    "created_at": "2025-01-15 14:00:00",
+    "start_time": "2025-01-20 09:00:00",
     "detail": "recontact",
     "comment": "Follow up on property visit"
 }
@@ -368,8 +380,8 @@ class HandleNewLeadJob implements ShouldQueue
     "event": "new_rdv",
     "lead_id": 123,
     "external_lead_id": "EXT-456",
-    "created_at": "2025-01-15T14:00:00+01:00",
-    "start_time": "2025-01-20T10:00:00+01:00",
+    "created_at": "2025-01-15 14:00:00",
+    "start_time": "2025-01-20 10:00:00",
     "location": "10 rue de la Paix, 75002 Paris",
     "detail": "Visite",
     "comment": "Apartment visit with client"
