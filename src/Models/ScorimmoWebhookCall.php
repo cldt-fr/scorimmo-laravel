@@ -4,8 +4,10 @@ namespace CLDT\Scorimmo\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\MassPrunable;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Spatie\WebhookClient\Models\WebhookCall;
+use Spatie\WebhookClient\WebhookConfig;
 
 class ScorimmoWebhookCall extends WebhookCall
 {
@@ -14,6 +16,20 @@ class ScorimmoWebhookCall extends WebhookCall
     public function getTable(): string
     {
         return config('scorimmo.webhook_table_name', parent::getTable());
+    }
+
+    public static function storeWebhook(WebhookConfig $config, Request $request): WebhookCall
+    {
+        $headers = static::headersToStore($config, $request);
+        $payload = static::buildPayloadFromRequest($request);
+
+        return static::create([
+            'name' => $config->name,
+            'url' => $request->fullUrl(),
+            'headers' => $headers,
+            'payload' => $payload,
+            'exception' => null,
+        ]);
     }
 
     public function eventName(): string
