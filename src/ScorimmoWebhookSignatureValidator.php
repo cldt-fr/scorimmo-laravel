@@ -15,7 +15,7 @@ class ScorimmoWebhookSignatureValidator implements SignatureValidator
         }
 
         $token = $config->signingSecret;
-        $requestToken = $request->input('token');
+        $requestToken = $request->header('X-Webhook-Token');
 
         if (! $requestToken) {
             return false;
