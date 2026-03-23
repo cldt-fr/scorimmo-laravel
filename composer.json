@@ -1,6 +1,6 @@
 {
     "name": "cldt/laravel-scorimmo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "API Wrapper for the Scorimmo API",
     "keywords": [
         "cldt",
