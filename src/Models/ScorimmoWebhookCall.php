@@ -21,7 +21,7 @@ class ScorimmoWebhookCall extends WebhookCall
     public static function storeWebhook(WebhookConfig $config, Request $request): WebhookCall
     {
         $headers = static::headersToStore($config, $request);
-        $payload = static::buildPayloadFromRequest($request);
+        $payload = json_decode($request->getContent(), true) ?? [];
 
         return static::create([
             'name' => $config->name,
